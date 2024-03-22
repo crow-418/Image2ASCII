@@ -11,26 +11,37 @@ int main(int argc, char *argv[]) {
         printf("./image2ascii image.png/jpeg/jpg\n");
         return 1;
     }
-  
-    const char *gscale = "@%#*+=-:.";
-     
-    int width, height, sizeOfPixels;
-    unsigned char *image_data = stbi_load(argv[1], &width, &height, &sizeOfPixels, STBI_grey); 
 
-    if (image_data) {
-        for (int rowIndex = 0; rowIndex < height; rowIndex++) {
-            for (int columnIndex = 0; columnIndex < width; columnIndex++) {
-                unsigned char pixel_value = image_data[rowIndex * width + columnIndex];
-                int index = pixel_value * (strlen(gscale) - 1) / 255; 
-                printf("%c", gscale[index]);               
-            }
-            printf("\n");
-        }
-        stbi_image_free(image_data);
-        
-        return EXIT_SUCCESS;
+    const char *gscale = "@%#*+=-:.";
+    int targetWidth = 120;
+    int targetHeight = 50;
+     
+    int width, height, numChannels;
+    unsigned char *image_data = stbi_load(argv[1], &width, &height, &numChannels, STBI_rgb); 
+
+    if (image_data == NULL) {
+        printf("Error loading image.\n");
+        return 1;
     }
 
+    float widthRatio = (float)width / targetWidth;
+    float heightRatio = (float)height / targetHeight;
+    if (image_data) {
+        for (int rowIndex = 0; rowIndex < targetHeight; rowIndex++) {
+            for (int columnIndex = 0; columnIndex < targetWidth; columnIndex++) {
+                int imgX = (int)(columnIndex * widthRatio);
+                int imgY = (int)(rowIndex * heightRatio);
+
+                unsigned char pixel_value = image_data[(imgY * width + imgX) * numChannels];
+                int index = (int)(strlen(gscale) * (pixel_value / 255.0f)); 
+                putchar(gscale[index]);               
+            }
+            putchar('\n');
+        }
+        
+        stbi_image_free(image_data);
+        return EXIT_SUCCESS;
+    }
 
     return EXIT_FAILURE;
 }
