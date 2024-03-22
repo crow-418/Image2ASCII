@@ -1,29 +1,9 @@
 #include <stdbool.h>
 #include <stdio.h>
 #include <stdlib.h>
-#include <stdint.h>
 
-typedef uint8_t BYTE;
-typedef struct
-{
-    BYTE  rgbtBlue;
-    BYTE  rgbtGreen;
-    BYTE  rgbtRed;
-} __attribute__((__packed__))
-RGBTRIPLE;
-
-void grayscale(int height, int width, RGBTRIPLE image[height][width]) {
-    for (int i = 0; i < height; i++) {
-        for (int j = 0; j < width; j++) {
-            int average = (int)(0.5 + (image[i][j].rgbtBlue + image[i][j].rgbtGreen + image[i][j].rgbtRed) / 3.0);
-            image[i][j].rgbtBlue = average;
-            image[i][j].rgbtGreen = average;
-            image[i][j].rgbtRed = average;
-        }
-    }
-
-    return;
-}
+#define STB_IMAGE_IMPLEMENTATION
+#include <stb/stb_image.h>
 
 int main(int argc, char *argv[]) {
     if (argc != 2) {
@@ -32,10 +12,25 @@ int main(int argc, char *argv[]) {
         return 1;
     }
   
-    const char *gscale1 = "$@B%8&WM#*oahkbdpqwmZO0QLCJUYXzcvunxrjft/\\|()1{}[]?-_+~i!lI;:,\"^`";
-    char *infile = argv[1];
+    const char *gscale = "@%#*+=-:.";
      
-    FILE *inptr = fopen(infile, "r");
+    int width, height, sizeOfPixels;
+    unsigned char *image_data = stbi_load(argv[1], &width, &height, &sizeOfPixels, STBI_grey); 
 
-    return EXIT_SUCCESS;
+    if (image_data) {
+        for (int rowIndex = 0; rowIndex < height; rowIndex++) {
+            for (int columnIndex = 0; columnIndex < width; columnIndex++) {
+                unsigned char pixel_value = image_data[rowIndex * width + columnIndex];
+                int index = pixel_value * (strlen(gscale) - 1) / 255; 
+                printf("%c", gscale[index]);               
+            }
+            printf("\n");
+        }
+        stbi_image_free(image_data);
+        
+        return EXIT_SUCCESS;
+    }
+
+
+    return EXIT_FAILURE;
 }
