@@ -17,7 +17,7 @@ int main(int argc, char *argv[]) {
     int targetHeight = 50;
      
     int width, height, numChannels;
-    unsigned char *image_data = stbi_load(argv[1], &width, &height, &numChannels, STBI_rgb); 
+    unsigned char *image_data = stbi_load(argv[1], &width, &height, &numChannels, STBI_grey); 
 
     if (image_data == NULL) {
         printf("Error loading image.\n");
@@ -32,7 +32,7 @@ int main(int argc, char *argv[]) {
                 int imgX = (int)(columnIndex * widthRatio);
                 int imgY = (int)(rowIndex * heightRatio);
 
-                unsigned char pixel_value = image_data[(imgY * width + imgX) * numChannels];
+                unsigned char pixel_value = image_data[imgY * width + imgX];
                 int index = (int)(strlen(gscale) * (pixel_value / 255.0f)); 
                 putchar(gscale[index]);               
             }
