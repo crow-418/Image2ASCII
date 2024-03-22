@@ -13,8 +13,13 @@ int main(int argc, char *argv[]) {
     }
 
     const char *gscale = "@%#*+=-:.";
-    int targetWidth = 120;
-    int targetHeight = 50;
+    unsigned int targetWidth;
+    unsigned int targetHeight;
+
+    printf("What is the desired width?\n");
+    scanf("%d", &targetWidth);
+    printf("What is the desired height?\n");
+    scanf("%d", &targetHeight);
      
     int width, height, numChannels;
     unsigned char *image_data = stbi_load(argv[1], &width, &height, &numChannels, STBI_grey); 
@@ -27,8 +32,8 @@ int main(int argc, char *argv[]) {
     float widthRatio = (float)width / targetWidth;
     float heightRatio = (float)height / targetHeight;
     if (image_data) {
-        for (int rowIndex = 0; rowIndex < targetHeight; rowIndex++) {
-            for (int columnIndex = 0; columnIndex < targetWidth; columnIndex++) {
+        for (size_t rowIndex = 0; rowIndex < targetHeight; rowIndex++) {
+            for (size_t columnIndex = 0; columnIndex < targetWidth; columnIndex++) {
                 int imgX = (int)(columnIndex * widthRatio);
                 int imgY = (int)(rowIndex * heightRatio);
 
@@ -42,6 +47,5 @@ int main(int argc, char *argv[]) {
         stbi_image_free(image_data);
         return EXIT_SUCCESS;
     }
-
     return EXIT_FAILURE;
 }
