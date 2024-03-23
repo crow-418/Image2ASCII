@@ -7,10 +7,12 @@ This is a simple Image2ASCII converter implemented in C. The program takes an in
 1. Clone the repository to your local machine.
 2. Navigate to the repository directory.
 3. Compile the program using the provided Makefile:
+
     ```
     make
     ```
 4. Run the program by providing the image file as a command-line argument:
+
     ```
     ./image2ascii image.png/jpeg/jpg
     ```
