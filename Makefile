@@ -1,5 +1,5 @@
 CC = gcc
-CFLAGS = -Wall -Wextra -std=c99 -O2 -lm
+CFLAGS = -Wall -Wextra -std=c99 -O2 -lm -Iinclude
 TARGET = image2ascii
 SRCDIR = src
 BUILDDIR = build
